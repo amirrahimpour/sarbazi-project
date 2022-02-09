@@ -1,0 +1,3 @@
+Jan 24 10:46:04 m-cloud1 account-server: 192.168.0.3 - - [24/Jan/2021:07:16:04 +0000] "PUT /sdc/293/AUTH_test/719551d5f8524f3bbfd290e3910b709c_1" 201 - "-" "-" "container-updater 58" 0.0014 "-" 232 0
+Jan 24 10:44:55 m-cloud1 proxy-server: STDERR: 172.24.1.195 - - [24/Jan/2021 07:14:55] "GET /auth/v1.0 HTTP/1.1" 200 419 0.005758 (txn: tx831721e2f4fe4051be70f-00600d1e6e)
+Jan 24 10:44:55 m-cloud1 account-server: 192.168.0.3 - - [24/Jan/2021:07:14:55 +0000] "PUT /sdc/293/AUTH_test/b6f958b9c352498d86af6a98c74ffdb0_0" 201 - "PUT http://m-cloud1:6201/sdc/443/AUTH_test/b6f958b9c352498d86af6a98c74ffdb0_0" "txa3d963d0921d45fba59b1-00600d1e6f" "container-server 201" 0.0081 "-" 231 0

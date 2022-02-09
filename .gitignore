@@ -1,0 +1,4 @@
+.vscode
+__pycache__
+LogDB_all.json
+sample_log.txt

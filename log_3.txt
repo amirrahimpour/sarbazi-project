@@ -1,0 +1,1 @@
+Jan 24 10:45:01 m-cloud1 container-server: 172.24.1.196 - - [24/Jan/2021:07:15:01 +0000] "PUT /sdf/401/AUTH_test/b6f958b9c352498d86af6a98c74ffdb0_3/4a0a85f1ce0b4fc7961f7785a2f0d05a" 201 - "PUT http://172.24.1.194:8080/sdc/461/AUTH_test/b6f958b9c352498d86af6a98c74ffdb0_3/4a0a85f1ce0b4fc7961f7785a2f0d05a" "txfa84921149304ff4a9524-00600d1e74" "object-server 168" 0.0020 "-" 199 0
