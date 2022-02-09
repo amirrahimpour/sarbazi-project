@@ -1,5 +1,7 @@
 
 import sys
+import json
+
 
 def main(log_file_name):
     from log_filter import LogFilter
@@ -9,25 +11,40 @@ def main(log_file_name):
 
     logger = LogManager()
 
-    credentials = {"uri": "bolt://localhost:7687", "userName": "neo4j", "password": "test"}
+    credentials = {"uri": "bolt://localhost:7687",
+                   "userName": "neo4j", "password": "test"}
 
     log_filter = LogFilter()
     neo = Neo4jHandler(credentials)
 
-    try:
-        with open(log_file_name) as f:
-            lines = f.read().split("\n")
-    except FileNotFoundError as e:
-        print(f"{e}")
-        exit(2)
+    file_extension = log_file_name.split(".")[1]
+    if file_extension == "txt":
+        try:
+            with open(log_file_name) as f:
+                lines = f.read().split("\n")
+        except FileNotFoundError as e:
+            print(f"{e}")
+            exit(2)
+    if file_extension == "json":
+        try:
+            with open(log_file_name) as f:
+                lines = json.loads(f.read())
+        except FileNotFoundError as e:
+            print(f"{e}")
+            exit(2)
 
     graph_handler = GraphHandler(neo, log_filter, logger)
-    graph_handler.create_graph(lines)
+    if file_extension == "txt":
+        graph_handler.create_graph_txt(lines)
+
+    if file_extension == "json":
+        graph_handler.create_graph_json(lines)
 
     print("finished")
 
 
 if __name__ == "__main__":
+    main("LogDB_test.json")
     print(sys.argv)
     log_file_name = None
     if len(sys.argv) > 1:
@@ -41,10 +58,9 @@ if __name__ == "__main__":
         else:
             log_file_name = sys.argv[1]
             main(log_file_name)
-    else:        
+    else:
         print(
             """
             please provide log file name
             """
         )
-    

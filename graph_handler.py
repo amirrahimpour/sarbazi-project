@@ -5,6 +5,23 @@ server_names = {
     "172.24.1.194": "cloud1",
     "172.24.1.195": "cloud2",
     "172.24.1.196": "cloud3",
+    "172.20.0.2": "m1-r1z1s1",
+    "172.20.0.3": "m2-r1z1s1",
+    "172.20.0.4": "m3-r1z1s1",
+    "172.20.0.5": "m4-r1z1s1",
+    "172.20.0.6": "m5-r1z1s1",
+    "172.20.0.7": "m6-r1z1s1",
+    "172.20.0.8": "m7-r1z1s1",
+    "172.20.0.9": "m8-r1z1s1",
+}
+mapping = {
+    "proxy": "P",
+    "account": "A",
+    "container": "C",
+    "object": "O",
+    "Swift": "S",
+    "python-swiftclient-3.5.0": "S",
+    "none": "none",
 }
 
 
@@ -20,7 +37,7 @@ class GraphHandler:
         self.parser = parser  # log parser object
         self.logger = logger  # logger object (for unprocessible lines)
 
-    def create_graph(self, lines):
+    def create_graph_txt(self, lines):
         """
         create a graph based on input log lings
         """
@@ -55,6 +72,28 @@ class GraphHandler:
             # self.edges[f"{node_1}-{node_2}"] = []
             # self.edges[f"{node_1}-{node_2}"].append(edge["label"])
 
+    def create_graph_json(self, lines):
+        self.neo.clear_graph()
+        for i, _line in enumerate(lines):
+            result = self.extract_node_edge_from_json(_line)
+            if None in result:
+                self.logger.error(_line)    # log the unprocessible line
+                continue
+
+            node_1, node_2, edge = result
+            if "none" in edge["label"]:
+                self.logger.error(_line)    # log the unprocessible line
+                continue
+
+            if node_1 not in self.nodes:
+                self.neo.create_new_node(node_1)
+                self.nodes.append(node_1)
+            if node_2 not in self.nodes:
+                self.neo.create_new_node(node_2)
+                self.nodes.append(node_2)
+
+            self.neo.create_new_edge(node_1, node_2, edge)
+
     def extract_node_edge_from_log(self, line):
         """
         extract nodes and edges from log lines
@@ -63,7 +102,8 @@ class GraphHandler:
             parsed_log = self.parser.parse_log(line)
             node_1 = parsed_log["remote_addr"]
             node_2 = parsed_log["destination_server"]
-            source, method, destination = self.get_source_destination(parsed_log)
+            source, method, destination = self.get_source_destination(
+                parsed_log)
             edge_label = f"{source}_{method}_{destination}"
 
         except Exception as e:
@@ -85,6 +125,10 @@ class GraphHandler:
                 node_1 = f"IP_{node_1}".replace(".", "_")
             if "." in node_2:
                 node_2 = f"IP_{node_2}".replace(".", "_")
+            if "-" in node_1:
+                node_1 = f"{node_1}".replace("-", "_")
+            if "-" in node_2:
+                node_2 = f"{node_2}".replace("-", "_")
 
         except Exception as e:
             pass
@@ -97,28 +141,48 @@ class GraphHandler:
             _type = "INFO"
 
         message = parsed_log["message"][0:90].replace("'", "")
-        edge = {"type": _type, "label": edge_label, "message": message}
+
         parsed_log["type"] = _type
         parsed_log["label"] = edge_label
         parsed_log["message"] = message
-        
+
         return node_1, node_2, parsed_log
 
     def get_source_destination(self, parsed_log):
         """
         map service names to predefined abbreviations
         """
-        mapping = {
-            "proxy": "P",
-            "account": "A",
-            "container": "C",
-            "object": "O",
-            "Swift": "S",
-            "python-swiftclient-3.5.0": "S",
-            "none": "none",
-        }
         source = mapping[parsed_log["source_service"]]
         destination = mapping[parsed_log["program_name"]]
 
         method = parsed_log["method"]
         return source, method, destination
+
+    def extract_node_edge_from_json(self, line):
+        try:
+            node_1 = server_names[line["remote_addr"]]
+            node_2 = line["sysloghost"]
+            # node_2 = server_names[line["host"]]
+            source = mapping[line["user_agent"].split("-server")[0]]
+            method = line["referer"].split(" ")[0]
+            if method == "-":
+                method = line["message"].split(" ")[6].split("\"")[1]
+            destination = mapping[line["programname"].split("-server")[0]]
+            edge = {
+                "type": "INFO",
+                "label": f"{source}_{method}_{destination}",
+            }
+            if "-" in node_1:
+                node_1 = f"{node_1}".replace("-", "_")
+            if "-" in node_2:
+                node_2 = f"{node_2}".replace("-", "_")
+            if "." in node_1:
+                node_1 = f"IP_{node_1}".replace(".", "_")
+            if "." in node_2:
+                node_2 = f"IP_{node_2}".replace(".", "_")
+        except Exception as e:
+            return None, None, None
+        # if node_1 == node_2:
+        #     pass
+        #     print("jhere")
+        return node_1, node_2, edge
