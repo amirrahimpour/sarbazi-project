@@ -185,4 +185,7 @@ class GraphHandler:
         # if node_1 == node_2:
         #     pass
         #     print("jhere")
+        for key in line:
+            if "@" not in key and key != "tags":
+                edge[key] = line[key]
         return node_1, node_2, edge
