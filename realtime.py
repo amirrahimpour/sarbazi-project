@@ -5,6 +5,7 @@ from log_filter import LogFilter
 from graph_handler import GraphHandler
 from neo4j_handler import Neo4jHandler
 from settings import ENV
+from json import loads
 import sys
 
 
@@ -111,7 +112,7 @@ if __name__ == "__main__":
             )
         else:
             log_data = sys.argv[1]
-            main(log_data)
+            main(loads(log_data))
     else:
         print(
             """
