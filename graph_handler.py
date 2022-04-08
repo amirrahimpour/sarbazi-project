@@ -1,7 +1,6 @@
 """
     this file contains methods for creating graph edges and nodes
 """
-from tkinter.messagebox import NO
 from settings import ENV
 
 
