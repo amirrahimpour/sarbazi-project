@@ -66,7 +66,7 @@ def main(log):
 
 if __name__ == "__main__":
     print(sys.argv)
-    log_data = {
+    """log_data = {
         "log": {
             "host": "4f33df1f5cc2",
                     "host_ip": "172.17.0.2",
@@ -100,7 +100,7 @@ if __name__ == "__main__":
             "policy_index": "-"
         }
     }
-    main(log_data)
+    main(log_data)"""
     if len(sys.argv) > 1:
         if sys.argv[1] == "--help":
             print(
