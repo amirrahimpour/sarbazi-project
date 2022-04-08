@@ -170,7 +170,7 @@ class QueryGenerator:
 if __name__ == "__main__":
     query_gen = QueryGenerator()
     print(sys.argv)
-    if sys.argv[1] == '--help':
+    if len(sys.argv) == 1 or sys.argv[1] == '--help':
         print(
             """
             
@@ -184,6 +184,7 @@ if __name__ == "__main__":
             example: python3 query_generator.py  P  PUT  O 2xx
             """
         )
-    query = query_gen.generate_query(
-        sys.argv[1], sys.argv[3], sys.argv[4], sys.argv[2])
-    print(query)
+    else:
+        query = query_gen.generate_query(
+            sys.argv[1], sys.argv[3], sys.argv[4], sys.argv[2])
+        print(query)

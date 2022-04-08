@@ -7,7 +7,7 @@ def main(log_file_name):
     from log_filter import LogFilter
     from neo4j_handler import Neo4jHandler
     from graph_handler import GraphHandler
-    from log_manager import LogManager
+    from logs.log_manager import LogManager
 
     logger = LogManager()
 
@@ -44,7 +44,7 @@ def main(log_file_name):
 
 
 if __name__ == "__main__":
-    #main("LogDB_test.json")
+    # main("LogDB_test.json")
     print(sys.argv)
     log_file_name = None
     if len(sys.argv) > 1:

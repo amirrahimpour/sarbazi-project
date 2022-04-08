@@ -2,4 +2,11 @@
 __pycache__
 LogDB_all.json
 sample_log.txt
-logs
+logs/logs/unprocessible.log
+.idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/vcs.xml
+.idea/modules.xml
+.idea/sarbazi.iml
+logs/logs/unprocessible.log
+.idea/*
