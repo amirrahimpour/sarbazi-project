@@ -18,7 +18,8 @@ class Neo4jHandler:
         uri = config["uri"]
         userName = config["userName"]
         password = config["password"]
-        self.graphDB_Driver = GraphDatabase.driver(uri, auth=(userName, password))
+        self.graphDB_Driver = GraphDatabase.driver(
+            uri, auth=(userName, password))
 
     def create_new_node(self, node: str) -> str:
         """create new node named (node)
@@ -26,7 +27,8 @@ class Neo4jHandler:
         :param node: node name
         :return: node creation query
         """
-        create_node = "CREATE \n" + f"({node}:node " + "{ name: " + f'"{node}"' + "})"
+        create_node = "CREATE \n" + \
+            f"({node}:node " + "{ name: " + f'"{node}"' + "})"
         with self.graphDB_Driver.session() as graphDB_Session:
             graphDB_Session.run(create_node)
 
@@ -46,6 +48,8 @@ class Neo4jHandler:
         for i, key in enumerate(edge.keys()):
             # if key == "label":
             # continue
+            if isinstance(edge[key], list):
+                continue
             string += f"{key}: " + f"'{edge[key]}', "
         string = string[0:-2]  # to avoid the final ', ' in the string
 

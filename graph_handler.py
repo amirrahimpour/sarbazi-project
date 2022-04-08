@@ -1,28 +1,8 @@
 """
     this file contains methods for creating graph edges and nodes
 """
-server_names = {
-    "172.24.1.194": "cloud1",
-    "172.24.1.195": "cloud2",
-    "172.24.1.196": "cloud3",
-    "172.20.0.2": "m1-r1z1s1",
-    "172.20.0.3": "m2-r1z1s1",
-    "172.20.0.4": "m3-r1z1s1",
-    "172.20.0.5": "m4-r1z1s1",
-    "172.20.0.6": "m5-r1z1s1",
-    "172.20.0.7": "m6-r1z1s1",
-    "172.20.0.8": "m7-r1z1s1",
-    "172.20.0.9": "m8-r1z1s1",
-}
-mapping = {
-    "proxy": "P",
-    "account": "A",
-    "container": "C",
-    "object": "O",
-    "Swift": "S",
-    "python-swiftclient-3.5.0": "S",
-    "none": "none",
-}
+from tkinter.messagebox import NO
+from settings import ENV
 
 
 class GraphHandler:
@@ -117,10 +97,10 @@ class GraphHandler:
 
             node_1 = node_1.replace("m-", "")
             node_2 = node_2.replace("m-", "")
-            if node_1 in server_names.keys():
-                node_1 = server_names[node_1]
-            if node_2 in server_names.keys():
-                node_2 = server_names[node_2]
+            if node_1 in ENV.server_names.keys():
+                node_1 = ENV.server_names[node_1]
+            if node_2 in ENV.server_names.keys():
+                node_2 = ENV.server_names[node_2]
             if "." in node_1:
                 node_1 = f"IP_{node_1}".replace(".", "_")
             if "." in node_2:
@@ -152,22 +132,77 @@ class GraphHandler:
         """
         map service names to predefined abbreviations
         """
-        source = mapping[parsed_log["source_service"]]
-        destination = mapping[parsed_log["program_name"]]
+        source = ENV.mapping[parsed_log["source_service"]]
+        destination = ENV.mapping[parsed_log["program_name"]]
 
         method = parsed_log["method"]
         return source, method, destination
 
+    def extract_source_from_user_agent(self, user_agent):
+        source = None
+        try:
+            if "server" in user_agent:
+                source = ENV.mapping[user_agent.split("-server")[0]]
+            elif "updater" in user_agent:
+                source = ENV.mapping[user_agent.split("-updater")[0]]
+                source += "U"
+            else:
+                source = "S"
+        except Exception as e:
+            print(f"error in extracting source from user agent: {e}")
+            raise
+
+        return source
+
+    def extract_destination_from_line(self, line):
+        destination = None
+        if "program_name" in line:
+            program_name = line["program_name"]
+        elif "programname" in line:
+            program_name = line["programname"]
+        else:
+            return None
+
+        if "server" in program_name:
+            destination = ENV.mapping[
+                program_name.split("-server")[0]
+            ]
+        elif "updater" in program_name:
+            destination = ENV.mapping[
+                program_name.split("-updater")[0]
+            ]
+            destination += "U"
+        else:
+            destination = "S"
+        return destination
+
+    def extract_method_from_line(self, line):
+        if "method" in line:
+            method = line["method"]
+        else:
+            for _method in ENV.method_names:
+                if _method in line["message"]:
+                    return _method
+        return method
+
     def extract_node_edge_from_json(self, line):
         try:
-            node_1 = server_names[line["remote_addr"]]
-            node_2 = line["sysloghost"]
-            # node_2 = server_names[line["host"]]
-            source = mapping[line["user_agent"].split("-server")[0]]
-            method = line["referer"].split(" ")[0]
-            if method == "-":
-                method = line["message"].split(" ")[6].split("\"")[1]
-            destination = mapping[line["programname"].split("-server")[0]]
+            if line["remote_addr"] in ENV.server_names:
+                node_1 = ENV.server_names[line["remote_addr"]]
+            else:
+                node_1 = line["remote_addr"]
+                if node_1 == "-":
+                    return None, None, None
+
+            # node_2 = line["sysloghost"]
+            if line["host"] in ENV.server_names:
+                node_2 = ENV.server_names[line["host"]]
+            else:
+                node_2 = line["host"]
+
+            source = self.extract_source_from_user_agent(line["user_agent"])
+            destination = self.extract_destination_from_line(line)
+            method = self.extract_method_from_line(line)
             edge = {
                 "type": "INFO",
                 "label": f"{source}_{method}_{destination}",
