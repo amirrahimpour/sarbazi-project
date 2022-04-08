@@ -112,7 +112,7 @@ if __name__ == "__main__":
             )
         else:
             log_data = sys.argv[1]
-            main(loads(log_data))
+            main(eval(log_data))
     else:
         print(
             """
