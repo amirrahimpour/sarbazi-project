@@ -20,13 +20,13 @@ class RealTimeDrawer:
         self.graph = GraphHandler(self.neo, self. parser, self.logger)
 
     def draw(self, message: Dict):
-        result = self.extract_node_edge_from_json(message["log"])
+        result = self.graph.extract_node_edge_from_json(message["log"])
         # node_1 = ""
         # node_2 = ""
         # edge = {}
         node_1, node_2, edge = result
         node_1, node_2 = self.preprocess_node_names([node_1, node_2])
-        with self.graphDB_Driver.session() as graphDB_Session:
+        with self.neo.graphDB_Driver.session() as graphDB_Session:
             nodes = graphDB_Session.run("MATCH (n:node) RETURN n ")
             node_names = [n[0]._properties['name'] for n in nodes]
             print("here")
@@ -66,7 +66,7 @@ def main(log):
 
 if __name__ == "__main__":
     print(sys.argv)
-    """log_data = {
+    log_data = {
         "log": {
             "host": "4f33df1f5cc2",
                     "host_ip": "172.17.0.2",
@@ -100,7 +100,7 @@ if __name__ == "__main__":
             "policy_index": "-"
         }
     }
-    main(log_data)"""
+    main(log_data)
     if len(sys.argv) > 1:
         if sys.argv[1] == "--help":
             print(
