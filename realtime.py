@@ -21,7 +21,7 @@ class RealTimeDrawer:
         self.graph = GraphHandler(self.neo, self. parser, self.logger)
 
     def draw(self, message: Dict):
-        message = eval(message)
+        # message = eval(message)
         result = self.graph.extract_node_edge_from_json(message["log"])
         # node_1 = ""
         # node_2 = ""
@@ -68,41 +68,41 @@ def main(log):
 
 if __name__ == "__main__":
     print(sys.argv)
-    # log_data = """{
-    #     "log": {
-    #         "host": "4f33df1f5cc2",
-    #         "host_ip": "172.17.0.2",
-    #         "program_name": "proxy-server",
-    #         "client_ip": "172.17.0.1",
-    #         "remote_addr": "172.17.0.1",
-    #         "date_time": "2022-04-03 14:01:17.678899",
-    #         "method": "GET",
-    #         "path": "/healthcheck",
-    #         "protocol": "HTTP/1.0",
-    #         "status_int": 200,
-    #         "referer": "-",
-    #         # "user_agent": "curl/7.68.0",
-    #         "user_agent": "account-server",
-    #         "auth_token": "-",
-    #         "bytes_recvd": 0,
-    #         "bytes_sent": 0,
-    #         "client_etag": "-",
-    #         "transaction_id": "txdxxxx",
-    #         "headers": [
-    #             "Host: 172.17.0.2:8080",
-    #             "User-Agent: curl/7.68.0",
-    #             "Accept: */*",
-    #             "Content-Type: "
-    #         ],
-    #         "request_time": "0.0007",
-    #         "source": "-",
-    #         "log_info": "-",
-    #         "start_time": "164.6",
-    #         "end_time": "164.7",
-    #         "policy_index": "-"
-    #     }
-    # }"""
-    # main(log_data)
+    log_data = """{
+        "log": {
+            "host": "4f33df1f5cc2",
+            "host_ip": "172.17.0.2",
+            "program_name": "proxy-server",
+            "client_ip": "172.17.0.1",
+            "remote_addr": "172.17.0.1",
+            "date_time": "2022-04-03 14:01:17.678899",
+            "method": "GET",
+            "path": "/healthcheck",
+            "protocol": "HTTP/1.0",
+            "status_int": 200,
+            "referer": "-",
+            # "user_agent": "curl/7.68.0",
+            "user_agent": "account-server",
+            "auth_token": "-",
+            "bytes_recvd": 0,
+            "bytes_sent": 0,
+            "client_etag": "-",
+            "transaction_id": "txdxxxx",
+            "headers": [
+                "Host: 172.17.0.2:8080",
+                "User-Agent: curl/7.68.0",
+                "Accept: */*",
+                "Content-Type: "
+            ],
+            "request_time": "0.0007",
+            "source": "-",
+            "log_info": "-",
+            "start_time": "164.6",
+            "end_time": "164.7",
+            "policy_index": "-"
+        }
+    }"""
+    main(log_data)
     if len(sys.argv) > 1:
         if sys.argv[1] == "--help":
             print(
