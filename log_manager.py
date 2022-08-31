@@ -78,7 +78,7 @@ class LogManager:
         )
         return formatter
 
-    def setup_logger(self):
+    def setup_logger(self):                                     # initialize logger object with handler
         self.f_logger = self.init_logger()
         handler = self.init_handler()
         self.f_logger.addHandler(handler)
@@ -90,7 +90,7 @@ class LogManager:
         """
         return self.f_logger
 
-    def info(self, *args, **kwargs):
+    def info(self, *args, **kwargs):                            # override logging functions
         self.f_logger.info(*args, **kwargs)
 
     def error(self, *args, **kwargs):
