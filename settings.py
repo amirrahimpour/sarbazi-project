@@ -15,7 +15,7 @@ class ENV:
     File_MAX_SIZE = int(environ.get("File_MAX_SIZE", 83886080))
     File_BACKUP_COUNT = int(environ.get("File_BACKUP_COUNT", 5))
 
-    mapping = {
+    mapping = {                         # service name mappings
         "proxy": "P",
         "account": "A",
         "container": "C",
@@ -28,7 +28,7 @@ class ENV:
         "container-server": "C",
         "none": "none",
     }
-    server_names = {        
+    server_names = {                    # server name mappings
         "172.20.0.1": "IP_172_20_0_1",
         "172.20.0.2": "m1-r1z1s1",
         "172.20.0.3": "m2-r1z1s1",
@@ -39,6 +39,6 @@ class ENV:
         "172.20.0.8": "m7-r1z1s1",
         "172.20.0.9": "m8-r1z1s1",        
     }
-    method_names = [
-        "GET", "POST", "PUT", "HEAD",
+    method_names = [                   # method names
+        "GET", "POST", "PUT", "HEAD", "DELETE", "COPY"
     ]
