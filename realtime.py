@@ -21,6 +21,7 @@ class RealTimeDrawer:
         self.graph = GraphHandler(self.neo, self. parser, self.logger)
 
     def draw(self, message: Dict):
+        """ send request to neo4j server """
         # message = eval(message)
         result = self.graph.extract_node_edge_from_json(message["log"])
         # node_1 = ""
@@ -41,6 +42,7 @@ class RealTimeDrawer:
             self.neo.create_new_edge(node_1, node_2, edge)
 
     def preprocess_node_names(self, nodes):
+        """ extract node names """
         new_nodes = []
         for i, node_name in enumerate(nodes):
             try:
