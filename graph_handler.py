@@ -40,18 +40,9 @@ class GraphHandler:
                 self.nodes.append(node_2)
 
             self.neo.create_new_edge(node_1, node_2, edge)
-            # if f"{node_1}-{node_2}" in self.edges:
-            # if edge["label"] not in self.edges[f"{node_1}-{node_2}"]:
-            # self.neo.create_new_edge(node_1, node_2, edge)
-            # self.edges[f"{node_1}-{node_2}"].append(edge["label"])
-            # else:
-            # pass
-            # else:
-            # self.neo.create_new_edge(node_1, node_2, edge)
-            # self.edges[f"{node_1}-{node_2}"] = []
-            # self.edges[f"{node_1}-{node_2}"].append(edge["label"])
 
     def create_graph_json(self, lines):
+        """ create graph from json (list of dict objs)"""
         self.neo.clear_graph()
         for i, _line in enumerate(lines):
             result = self.extract_node_edge_from_json(_line)
@@ -94,8 +85,8 @@ class GraphHandler:
             if node_1 == "-" or node_2 == "-":
                 return None, None, None
 
-            node_1 = node_1.replace("m-", "")
-            node_2 = node_2.replace("m-", "")
+            node_1 = node_1.replace("m-", "m_")
+            node_2 = node_2.replace("m-", "m_")
             if node_1 in ENV.server_names.keys():
                 node_1 = ENV.server_names[node_1]
             if node_2 in ENV.server_names.keys():
@@ -193,11 +184,12 @@ class GraphHandler:
                 if node_1 == "-":
                     return None, None, None
 
-            # node_2 = line["sysloghost"]
-            if line["host"] in ENV.server_names:
-                node_2 = ENV.server_names[line["host"]]
+            node_2_temp = line["sysloghost"]
+            # node_2_temp = line["host"]
+            if node_2_temp in ENV.server_names:
+                node_2 = ENV.server_names[node_2_temp]
             else:
-                node_2 = line["host"]
+                node_2 = node_2_temp
 
             source = self.extract_source_from_user_agent(line["user_agent"])
             destination = self.extract_destination_from_line(line)
@@ -216,10 +208,14 @@ class GraphHandler:
                 node_2 = f"IP_{node_2}".replace(".", "_")
         except Exception as e:
             return None, None, None
-        # if node_1 == node_2:
-        #     pass
-        #     print("jhere")
+
         for key in line:
             if "@" not in key and key != "tags":
                 edge[key] = line[key]
+            if "user_agent" == key:
+                try:
+                    edge["user_agent"], edge["user_agent_id"] = line[key].split(
+                        " ")
+                except Exception as e:
+                    edge[key] = line[key]
         return node_1, node_2, edge

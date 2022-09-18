@@ -1,0 +1,32 @@
+[
+    {
+        "@version": "1",
+        "procid": "-",
+        "device_name": "sdc7",
+        "host": "r1z1s1",
+        "@timestamp": "2022-02-07T12:10:18.598Z",
+        "user_agent": "container-updater 182",
+        "referer": "-",
+        "remote_addr": "172.20.0.5",
+        "request_path": "/sdc7/293/AUTH_test/Mycontainer2",
+        "datetime": "07/Feb/2022:12:10:18",
+        "account_path": "AUTH_test/Mycontainer2",
+        "sysloghost": "m7-r1z1s1",
+        "status_int": "201",
+        "policy_index": 0,
+        "type": "rsyslog",
+        "port": 53460,
+        "message": " 172.20.0.5 - - [07/Feb/2022:12:10:18 +0000] \"PUT /sdc7/293/AUTH_test/Mycontainer2\" 201 - \"-\" \"-\" \"container-updater 182\" 0.0019 \"-\" 241 0",
+        "tags": [
+            "swift",
+            "ACCT_SER_TRANSACTION"
+        ],
+        "facility": "local0",
+        "server_pid": 241,
+        "programname": "account-server",
+        "request_time": 0.0019,
+        "partition_number": "293",
+        "request_method": "PUT",
+        "severity": "info"
+    }
+]

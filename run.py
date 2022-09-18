@@ -45,7 +45,7 @@ def main(log_file_name):
 
 if __name__ == "__main__":
     # main("LogDB_test.json")
-    print(sys.argv)
+    # print(sys.argv)
     log_file_name = None
     if len(sys.argv) > 1:
         if sys.argv[1] == "--help":

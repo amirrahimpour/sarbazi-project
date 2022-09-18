@@ -79,17 +79,20 @@ class LogFilter:
         u = regex_search(
             r"http:\/\/([0-9])*\.([0-9])*\.([0-9])*\.([0-9])*\:([0-9])*\/", line
         )
-        # http://x.x.x.x:PORT
+        # look for http://x.x.x.x:PORT pattern
         if u:
             url = u.group()
             ip, port = url[7:-1].split(":")
             return port
 
+        # look for 'port: XXXX' pattern
         u = regex_search(r"port'\: ([0-9])*", line)
         if u:
             string = u.group()
             port = string.split(": ")[1]
             return port
+        
+        # look for 'http://xxxx:PORT pattern
         u = regex_search(r"http:\/\/.*\:([0-9])*\/", line)
         if u:
             url = u.group()

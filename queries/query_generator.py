@@ -1,19 +1,6 @@
-"""
-MATCH 
-(n)-[r:S_GET_P{label:"S_GET_P", status_int:"200"}]->(m) 
-RETURN  n,m,r, r.status_int
-"""
-"""
-MATCH 
-(n)-[r:S_PUT_P{label:"S_PUT_P"}]->(m) 
-WHERE r.status_int=~"2.*"
-RETURN  n,m, r.status_int
-"""
-
-
-
-
+from re import search as regex_search
 import sys
+
 class QueryGenerator:
     """this class generates custom queries for Neo4j"""
 
@@ -126,65 +113,81 @@ class QueryGenerator:
                 "There was not enough space to save the " "resource. Drive: %(drive)s",
             ),
         }
-
-    def generate_query(
-        self, source_service: str, program_name: str, status: str, method: str
-    ) -> str:
-        """generate custom query based on input paramters
-        :param source: source service
-        :param program_name: destination service
-        :param status: status code of the operation
-        :param method: method name (GET, PUT, etc.)
+    
+    def generate_key_value_query(self, params, draw_graph=True):
         """
-        assert (
-            source_service in self.services
-        ), f"invalid source service: {source_service}"
-        assert program_name in self.services, f"invalid program name: {program_name}"
+        generate query based on key,value (interval) groups given in params
+        
+        """
 
-        if source_service in self.mapper.keys():
-            source_service = self.mapper[source_service]
-        if program_name in self.mapper.keys():
-            program_name = self.mapper[program_name]
-
-        status_string = f"\"{status}\""
-        if "X" in status.upper():
-            status_string = f'"{status[0]}.*"'
-        elif status == "000":
-            status_string = f'".*"'  # return all statuses
+        equality_string = ""
+        interval_string = "WHERE"
+        for i, key_value in enumerate(params):
+            key, value = key_value.split("=")
+            if "[" in value:
+                pattern_found = regex_search(r"\[.*\,.*\]", value)
+                if pattern_found:
+                    # print(pattern_found, key_value)
+                    int1 = value.split("[")[1].split(",")[0]
+                    int2 = value.split(",")[1].split("]")[0]
+                    if len(interval_string) > len("WHERE"):
+                        interval_string += f"and r.{key} >= \'{int1}\' and r.{key} < \'{int2}\'"
+                    else:
+                        interval_string += f" r.{key} >= \'{int1}\' and r.{key} < \'{int2}\'"
+            else:
+                equality_string += f"{key}: \'{value}\', "
+        
+        if len(interval_string) == len("WHERE"):
+                interval_string = ""
+        if draw_graph:
+            query = (
+                "\n" 
+                + "MATCH (n1)-[r{" 
+                + equality_string[:-2] 
+                + "}]->(n2) " 
+                + interval_string 
+                + " RETURN  n1, n2, r" 
+                + "\n"
+            )
         else:
-            assert int(status) in self.error_status, f"invald status: {status}"
-
-        query = (
-            "MATCH (n)-[r:"
-            + f"{source_service}_{method.upper()}_{program_name}"
-            + "{label: "
-            + f'"{source_service}_{method.upper()}_{program_name}"'
-            + "}]->(m) "
-            + f" WHERE r.status_int =~ "
-            + status_string
-            + " RETURN  n,m,r"
-        )
+            query = (
+                "\n" 
+                + "MATCH (n1)-[r{" 
+                + equality_string[:-2] 
+                + "}]->(n2) " 
+                + interval_string 
+                + " with n1, n2, COUNT(r) as num " 
+                + " return n1.name, n2.name, num" 
+                + "\n"
+            )
+        
         return query
 
 
 if __name__ == "__main__":
     query_gen = QueryGenerator()
-    print(sys.argv)
+    # print(sys.argv)
     if len(sys.argv) == 1 or sys.argv[1] == '--help':
         print(
             """
-            
-            python3 query_generator.py  [input 1] [input 2] [input 3] [input 4]
+            python3 query_generator.py key1=value1 key2=[value2,value3] etc.
+            for getting edges with key1=value1
+            and key2 within [value2,value3] interval
+            include --graph for graph visual output, otherwise number of edges with given conditions will be shown
 
-            input 1): user agent (for example: P for proxy server)
-            input 2): method name (for example: PUT, GET)
-            input 3): program name (for example: O for object server)
-            input 4): status code (for example: 200, 2xx)
-            
-            example: python3 query_generator.py  P  PUT  O 2xx
             """
         )
+
     else:
-        query = query_gen.generate_query(
-            sys.argv[1], sys.argv[3], sys.argv[4], sys.argv[2])
-        print(query)
+        params = sys.argv[1:]
+        if "--graph" in sys.argv:
+            draw_graph = True
+            params.remove("--graph")
+        else:
+            draw_graph = False
+
+        print(
+            query_gen.generate_key_value_query(
+                params=params, draw_graph=draw_graph
+            )
+        )

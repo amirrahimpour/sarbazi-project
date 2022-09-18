@@ -1,0 +1,20 @@
+"""
+MATCH 
+(n)-[r:S_GET_P{label:"S_GET_P", status_int:"200"}]->(m) 
+RETURN  n,m,r, r.status_int
+"""
+"""
+MATCH 
+(n)-[r:S_PUT_P{label:"S_PUT_P"}]->(m) 
+WHERE r.status_int=~"2.*"
+RETURN  n,m, r.status_int
+"""
+"""
+MATCH p=()-[r{port: '43300', request_method: 'PUT'}]->() 
+WHERE r.request_time >= '0.05' and 
+r.request_time < '0.06' and 
+r.status_int >= '200' and 
+r.status_int < '210' 
+RETURN  p
+"""
+

@@ -28,10 +28,8 @@ class ENV:
         "container-server": "C",
         "none": "none",
     }
-    server_names = {
-        "172.24.1.194": "cloud1",
-        "172.24.1.195": "cloud2",
-        "172.24.1.196": "cloud3",
+    server_names = {        
+        "172.20.0.1": "IP_172_20_0_1",
         "172.20.0.2": "m1-r1z1s1",
         "172.20.0.3": "m2-r1z1s1",
         "172.20.0.4": "m3-r1z1s1",
@@ -39,8 +37,8 @@ class ENV:
         "172.20.0.6": "m5-r1z1s1",
         "172.20.0.7": "m6-r1z1s1",
         "172.20.0.8": "m7-r1z1s1",
-        "172.20.0.9": "m8-r1z1s1",
+        "172.20.0.9": "m8-r1z1s1",        
     }
     method_names = [
-        "GET", "POST", "PUT", "HEAD",
+        "GET", "POST", "PUT", "HEAD", "DELETE", "COPY"
     ]
