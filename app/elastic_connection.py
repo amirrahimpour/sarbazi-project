@@ -6,7 +6,7 @@ class ElasticConnection:
     def __init__(self):
         self.user = 'elastic'
         self.password = 'changeme'
-        self.index = "monster01"
+        self.index = "hayoola"
         self.elastic_client = Elasticsearch(
             "http://localhost:9200",
             api_key=(self.user, self.password)
