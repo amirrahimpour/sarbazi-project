@@ -16,7 +16,7 @@ def save_csv(index_reader, attribute_names):
 
 
 def save_json(index_reader):
-    with open('../static/LogDB.json', 'w', encoding='utf-8') as jsonfile:
+    with open('LogDB.json', 'w', encoding='utf-8') as jsonfile:
         flag = False
         jsonfile.write("[")
         i = 0

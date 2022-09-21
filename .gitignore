@@ -13,3 +13,4 @@ logs/logs/unprocessible.log*
 online/LogDB_copy.json
 online/LogDB.json
 online/__pycache__
+LogDB.json

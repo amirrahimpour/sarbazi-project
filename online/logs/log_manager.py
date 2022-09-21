@@ -3,7 +3,7 @@ from logging.handlers import RotatingFileHandler
 from os import makedirs as os_makedirs
 from os import path as os_path
 
-from config import ENV
+from settings import ENV
 
 
 class LogManager:

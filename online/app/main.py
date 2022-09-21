@@ -12,7 +12,7 @@ from log_manager import LogManager
 
 
 if __name__ == '__main__':
-    elastic_client = ElasticConnection()
+    elastic_client = ElasticConnection(ENV.els_config)
     # elastic_client.read_all_log()
     lte = datetime(2022, 9, 10, 8, 10)
     # lte = datetime.datetime.utcnow()
@@ -25,10 +25,10 @@ if __name__ == '__main__':
     
     logger = LogManager()
     log_filter = LogFilter()
-    neo = Neo4jHandler(ENV.credentials)
+    neo = Neo4jHandler(ENV.neo4j_credentials)
     graph_handler = GraphHandler(neo, log_filter, logger, ENV)
 
-    with open("../static/LogDB.json") as f:
+    with open("LogDB.json") as f:
         lines = json.loads(f.read())
     
     graph_handler.create_graph_json(lines)
@@ -44,7 +44,7 @@ if __name__ == '__main__':
             lte=new_lte.strftime("%Y-%m-%dT%H:%M:%SZ")
         )
 
-        with open("../static/LogDB.json") as f:
+        with open("LogDB.json") as f:
             lines_to_add = json.loads(f.read())
         
         print(f"adding records from {lte} to {new_lte}")
