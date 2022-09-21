@@ -28,7 +28,7 @@ if __name__ == '__main__':
     neo = Neo4jHandler(ENV.credentials)
     graph_handler = GraphHandler(neo, log_filter, logger, ENV)
 
-    with open("LogDB.json") as f:
+    with open("../static/LogDB.json") as f:
         lines = json.loads(f.read())
     
     graph_handler.create_graph_json(lines)
@@ -44,7 +44,7 @@ if __name__ == '__main__':
             lte=new_lte.strftime("%Y-%m-%dT%H:%M:%SZ")
         )
 
-        with open("LogDB.json") as f:
+        with open("../static/LogDB.json") as f:
             lines_to_add = json.loads(f.read())
         
         print(f"adding records from {lte} to {new_lte}")

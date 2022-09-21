@@ -138,7 +138,7 @@ class QueryGenerator:
                 equality_string += f"{key}: \'{value}\', "
         
         if len(interval_string) == len("WHERE"):
-                interval_string = ""
+            interval_string = ""
         if draw_graph:
             query = (
                 "\n" 

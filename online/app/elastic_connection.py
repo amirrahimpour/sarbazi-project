@@ -3,12 +3,12 @@ from utility import save_csv, save_json
 
 
 class ElasticConnection:
-    def __init__(self):
-        self.user = 'elastic'
-        self.password = 'changeme'
-        self.index = "hayoola"
+    def __init__(self, ENV):
+        self.user = ENV["user"]
+        self.password = ENV["password"]
+        self.index = ENV["index"]
         self.elastic_client = Elasticsearch(
-            "http://localhost:9200",
+            ENV.uri,
             api_key=(self.user, self.password)
         )
 

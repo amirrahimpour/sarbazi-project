@@ -10,3 +10,6 @@ logs/logs/unprocessible.log
 .idea/sarbazi.iml
 logs/logs/unprocessible.log*
 .idea/*
+online/LogDB_copy.json
+online/LogDB.json
+online/__pycache__
