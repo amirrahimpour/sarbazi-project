@@ -8,7 +8,7 @@ class ElasticConnection:
         self.password = ENV["password"]
         self.index = ENV["index"]
         self.elastic_client = Elasticsearch(
-            ENV.uri,
+            ENV["uri"],
             api_key=(self.user, self.password)
         )
 

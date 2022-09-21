@@ -10,12 +10,12 @@ from neo4j_handler import Neo4jHandler
 from log_manager import LogManager
 
 
-
 if __name__ == '__main__':
-    elastic_client = ElasticConnection()
+    print(f'started application @ {datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")}')
+    elastic_client = ElasticConnection(ENV.els_config)
     # elastic_client.read_all_log()
-    lte = datetime(2022, 9, 10, 8, 10)
-    # lte = datetime.datetime.utcnow()
+    # lte = datetime(2022, 9, 10, 8, 10)
+    lte = datetime.utcnow()
     gte = lte - ENV.time_window
     
     elastic_client.read_main_log(
@@ -25,17 +25,21 @@ if __name__ == '__main__':
     
     logger = LogManager()
     log_filter = LogFilter()
-    neo = Neo4jHandler(ENV.credentials)
+    neo = Neo4jHandler(ENV.neo4j_credentials)
     graph_handler = GraphHandler(neo, log_filter, logger, ENV)
 
-    with open("../static/LogDB.json") as f:
-        lines = json.loads(f.read())
+    try:
+        with open("LogDB.json") as f:
+            lines = json.loads(f.read())
+    except Exception as e:
+        print(f"JSON load exp: {e}")
+        print(f.read())
     
     graph_handler.create_graph_json(lines)
     print("finished initial graph")
 
     while True:
-        # sleep(ENV.sliding.seconds)
+        sleep(ENV.sliding.seconds)
         new_lte = lte + ENV.sliding
         new_gte = gte + ENV.sliding
 
@@ -44,13 +48,13 @@ if __name__ == '__main__':
             lte=new_lte.strftime("%Y-%m-%dT%H:%M:%SZ")
         )
 
-        with open("../static/LogDB.json") as f:
+        with open("LogDB.json") as f:
             lines_to_add = json.loads(f.read())
         
         print(f"adding records from {lte} to {new_lte}")
         graph_handler.create_graph_json(lines_to_add, reset=False)
         
-        print(f"deleting records from {gte} to {new_gte}")
+        print(f"deleting records older than {new_gte}")
         graph_handler.delete_old_edges(new_gte.strftime("%Y-%m-%dT%H:%M:%SZ"))
         
         lte = new_lte

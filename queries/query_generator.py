@@ -1,5 +1,6 @@
 from re import search as regex_search
 import sys
+from typing import Dict
 
 class QueryGenerator:
     """this class generates custom queries for Neo4j"""
@@ -113,7 +114,20 @@ class QueryGenerator:
                 "There was not enough space to save the " "resource. Drive: %(drive)s",
             ),
         }
-    
+        self.contain_query_keys = [
+            "referer",
+            "request_path",
+            "message",
+            "account_path",
+            "container_path",
+            "log_info"
+        ]
+        self.datetime_keys = [
+            "request_start_time",
+            "request_end_time",
+            "datetime"
+        ]
+
     def generate_key_value_query(self, params, draw_graph=True):
         """
         generate query based on key,value (interval) groups given in params
@@ -130,10 +144,27 @@ class QueryGenerator:
                     # print(pattern_found, key_value)
                     int1 = value.split("[")[1].split(",")[0]
                     int2 = value.split(",")[1].split("]")[0]
-                    if len(interval_string) > len("WHERE"):
-                        interval_string += f"and r.{key} >= \'{int1}\' and r.{key} < \'{int2}\'"
+                    if key in self.datetime_keys:
+                        int1 = int1.replace(" ", "T")
+                        int2 = int2.replace(" ", "T")
+                        # datetime(r.datetime) <= datetime(\"{new_gte}\")
+                        if len(interval_string) > len("WHERE"):
+                            interval_string += f" and datetime(r.{key}) >= datetime(\'{int1}\') and datetime(r.{key}) < datetime(\'{int2}\')"
+                        else:
+                            interval_string += f" datetime(r.{key}) >= datetime(\'{int1}\') and datetime(r.{key}) < datetime(\'{int2}\')"
+
                     else:
-                        interval_string += f" r.{key} >= \'{int1}\' and r.{key} < \'{int2}\'"
+                        if len(interval_string) > len("WHERE"):
+                            interval_string += f" and r.{key} >= \'{int1}\' and r.{key} < \'{int2}\'"
+                        else:
+                            interval_string += f" r.{key} >= \'{int1}\' and r.{key} < \'{int2}\'"
+            
+            elif key in self.contain_query_keys:
+                if len(interval_string) > len("WHERE"):
+                    interval_string += f"and r.{key} CONTAINS \'{value}\'"
+                else:
+                    interval_string += f" r.{key} CONTAINS \'{value}\'"
+            
             else:
                 equality_string += f"{key}: \'{value}\', "
         
@@ -141,24 +172,20 @@ class QueryGenerator:
             interval_string = ""
         if draw_graph:
             query = (
-                "\n" 
-                + "MATCH (n1)-[r{" 
+                "MATCH (n1)-[r{" 
                 + equality_string[:-2] 
                 + "}]->(n2) " 
                 + interval_string 
                 + " RETURN  n1, n2, r" 
-                + "\n"
             )
         else:
             query = (
-                "\n" 
-                + "MATCH (n1)-[r{" 
+                "MATCH (n1)-[r{" 
                 + equality_string[:-2] 
                 + "}]->(n2) " 
                 + interval_string 
                 + " with n1, n2, COUNT(r) as num " 
-                + " return n1.name, n2.name, num" 
-                + "\n"
+                + " return n1.name, n2.name, num"
             )
         
         return query

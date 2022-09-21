@@ -7,7 +7,7 @@ def main(log_file_name):
     from log_filter import LogFilter
     from neo4j_handler import Neo4jHandler
     from graph_handler import GraphHandler
-    from logs.log_manager import LogManager
+    from log_manager import LogManager
 
     logger = LogManager()
 

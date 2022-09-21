@@ -81,7 +81,7 @@ class Neo4jHandler:
     def clear_graph(self) -> None:
         """ clear the graph"""
 
-        cqldelete1 = "match (a) -[r] -> () delete a, r"
+        cqldelete1 = "match (a) -[r] -> (b) delete r"
         cqldelete2 = "match (a) delete a"
         with self.graphDB_Driver.session() as graphDB_Session:
             graphDB_Session.run(cqldelete1)

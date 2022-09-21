@@ -2,7 +2,7 @@
 __pycache__
 LogDB_all.json
 sample_log.txt
-logs/logs/unprocessible.log
+logs/logs/unprocessible.log*
 .idea/inspectionProfiles/Project_Default.xml
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/vcs.xml
@@ -13,3 +13,7 @@ logs/logs/unprocessible.log*
 online/LogDB_copy.json
 online/LogDB.json
 online/__pycache__
+LogDB.json
+offline/logs/logs/unprocessible.log*
+online/data
+offline/data
