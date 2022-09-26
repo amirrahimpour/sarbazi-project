@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+    myneo4j:
+      ports:
+        - '7474:7474'
+        - '7687:7687'
+
+      volumes:
+        - '$PWD/data:/data'
+        - '$PWD/plugins:/plugins'
+
+      environment:
+
+        - NEO4J_apoc_export_file_enabled=true
+        - NEO4J_apoc_import_file_enabled=true
+        - NEO4J_apoc_import_file_use__neo4j__config=true
+        - 'NEO4JLABS_PLUGINS=\[\apoc\\]'
+        - NEO4J_AUTH=neo4j/test
+
+      build:
+        context: .
+        dockerfile: Dockerfile
