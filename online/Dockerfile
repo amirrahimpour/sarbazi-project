@@ -1,12 +1,14 @@
-# syntax=docker/dockerfile:1
-
-FROM python:3.8
+FROM neo4j AS builder
 
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+FROM python:3.8 as python
 
-COPY . .
+# RUN pip install upgrade pip
+ADD requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
-CMD [ "python3", "main.py"]
+COPY . /app
+WORKDIR /app/app
+
+CMD ["python3", "main.py"]

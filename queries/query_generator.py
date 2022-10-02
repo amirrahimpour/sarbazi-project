@@ -1,5 +1,6 @@
 from re import search as regex_search
 import sys
+from typing import Dict
 
 class QueryGenerator:
     """this class generates custom queries for Neo4j"""
@@ -141,24 +142,20 @@ class QueryGenerator:
             interval_string = ""
         if draw_graph:
             query = (
-                "\n" 
-                + "MATCH (n1)-[r{" 
+                "MATCH (n1)-[r{" 
                 + equality_string[:-2] 
                 + "}]->(n2) " 
                 + interval_string 
                 + " RETURN  n1, n2, r" 
-                + "\n"
             )
         else:
             query = (
-                "\n" 
-                + "MATCH (n1)-[r{" 
+                "MATCH (n1)-[r{" 
                 + equality_string[:-2] 
                 + "}]->(n2) " 
                 + interval_string 
                 + " with n1, n2, COUNT(r) as num " 
-                + " return n1.name, n2.name, num" 
-                + "\n"
+                + " return n1.name, n2.name, num"
             )
         
         return query
