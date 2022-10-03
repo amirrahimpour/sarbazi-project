@@ -1,4 +1,3 @@
-from asyncio import QueueEmpty
 from uvicorn import run
 from fastapi import FastAPI, Query
 from fastapi.staticfiles import StaticFiles
