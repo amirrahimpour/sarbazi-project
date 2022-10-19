@@ -25,7 +25,7 @@ class ENV:
         "user": "elastic",
         "password": "changeme",
         "index": "hayoola",
-        "uri": "http://localhost:9200"
+        "uri": "http://elk:9200"
     }
 
     # server name mappings
