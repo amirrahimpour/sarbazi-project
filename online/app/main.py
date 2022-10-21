@@ -11,10 +11,9 @@ from log_manager import LogManager
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
+
     print(f'started application @ {datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")}')
-=======
->>>>>>> d777ca5b909f39f8c757f76e5a486e81b9d21873
+
     elastic_client = ElasticConnection(ENV.els_config)
     # elastic_client.read_all_log()
     # lte = datetime(2022, 9, 10, 8, 10)
@@ -31,17 +30,9 @@ if __name__ == '__main__':
     neo = Neo4jHandler(ENV.neo4j_credentials)
     graph_handler = GraphHandler(neo, log_filter, logger, ENV)
 
-<<<<<<< HEAD
-    try:
-        with open("LogDB.json") as f:
-            lines = json.loads(f.read())
-    except Exception as e:
-        print(f"JSON load exp: {e}")
-        print(f.read())
-=======
     with open("LogDB.json") as f:
         lines = json.loads(f.read())
->>>>>>> d777ca5b909f39f8c757f76e5a486e81b9d21873
+
     
     graph_handler.create_graph_json(lines)
     print("finished initial graph")
@@ -67,11 +58,3 @@ if __name__ == '__main__':
         
         lte = new_lte
         gte = new_gte
-
-
-
-    
-
-    
-
-
