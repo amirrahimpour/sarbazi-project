@@ -148,16 +148,44 @@ class QueryGenerator:
                         int1 = int1.replace(" ", "T")
                         int2 = int2.replace(" ", "T")
                         # datetime(r.datetime) <= datetime(\"{new_gte}\")
-                        if len(interval_string) > len("WHERE"):
-                            interval_string += f" and datetime(r.{key}) >= datetime(\'{int1}\') and datetime(r.{key}) < datetime(\'{int2}\')"
+                        if "_" in value:
+                            if int1 == "_":
+                                if len(interval_string) > len("WHERE"):
+                                    interval_string += f" and datetime(r.{key}) <= datetime(\'{int2}\')"
+                                else:
+                                    interval_string += f" datetime(r.{key}) <= datetime(\'{int2}\')"
+
+                            elif int2 == "_":
+                                if len(interval_string) > len("WHERE"):
+                                    interval_string += f" and datetime(r.{key}) >= datetime(\'{int1}\')"
+                                else:
+                                    interval_string += f" datetime(r.{key}) >= datetime(\'{int1}\')"
+
                         else:
-                            interval_string += f" datetime(r.{key}) >= datetime(\'{int1}\') and datetime(r.{key}) < datetime(\'{int2}\')"
+                            if len(interval_string) > len("WHERE"):
+                                interval_string += f" and datetime(r.{key}) >= datetime(\'{int1}\') and datetime(r.{key}) <= datetime(\'{int2}\')"
+                            else:
+                                interval_string += f" datetime(r.{key}) >= datetime(\'{int1}\') and datetime(r.{key}) <= datetime(\'{int2}\')"
 
                     else:
-                        if len(interval_string) > len("WHERE"):
-                            interval_string += f" and r.{key} >= \'{int1}\' and r.{key} < \'{int2}\'"
+                        if "_" in value:
+                            if int1 == "_":
+                                if len(interval_string) > len("WHERE"):
+                                    interval_string += f" and r.{key} <= \'{int2}\'"
+                                else:
+                                    interval_string += f" r.{key} <= \'{int2}\'"
+
+                            elif int2 == "_":
+                                if len(interval_string) > len("WHERE"):
+                                    interval_string += f" and r.{key} >= \'{int1}\'"
+                                else:
+                                    interval_string += f" r.{key} >= \'{int1}\'"
+
                         else:
-                            interval_string += f" r.{key} >= \'{int1}\' and r.{key} < \'{int2}\'"
+                            if len(interval_string) > len("WHERE"):
+                                interval_string += f" and r.{key} >= \'{int1}\' and r.{key} <= \'{int2}\'"
+                            else:
+                                interval_string += f" r.{key} >= \'{int1}\' and r.{key} <= \'{int2}\'"
             
             elif key in self.contain_query_keys:
                 if len(interval_string) > len("WHERE"):
@@ -166,7 +194,11 @@ class QueryGenerator:
                     interval_string += f" r.{key} CONTAINS \'{value}\'"
             
             else:
-                equality_string += f"{key}: \'{value}\', "
+                if key in self.datetime_keys:
+                    value = value.replace(" ", "T")
+                    equality_string += f"{key}: datetime(\'{value}\'), "
+                else: 
+                    equality_string += f"{key}: \'{value}\', "
         
         if len(interval_string) == len("WHERE"):
             interval_string = ""

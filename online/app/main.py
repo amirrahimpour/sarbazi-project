@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import sleep
 
 from elastic_connection import ElasticConnection
@@ -11,15 +11,12 @@ from log_manager import LogManager
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
     print(f'started application @ {datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")}')
-=======
->>>>>>> d777ca5b909f39f8c757f76e5a486e81b9d21873
     elastic_client = ElasticConnection(ENV.els_config)
     # elastic_client.read_all_log()
-    # lte = datetime(2022, 9, 10, 8, 10)
-    lte = datetime.utcnow()
-    gte = lte - ENV.time_window
+    # lte = datetime(2022, 10, 30, 12, 40)
+    lte = datetime.now()
+    gte = lte - ENV.time_window 
     
     elastic_client.read_main_log(
         gte=gte.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -31,17 +28,8 @@ if __name__ == '__main__':
     neo = Neo4jHandler(ENV.neo4j_credentials)
     graph_handler = GraphHandler(neo, log_filter, logger, ENV)
 
-<<<<<<< HEAD
-    try:
-        with open("LogDB.json") as f:
-            lines = json.loads(f.read())
-    except Exception as e:
-        print(f"JSON load exp: {e}")
-        print(f.read())
-=======
     with open("LogDB.json") as f:
         lines = json.loads(f.read())
->>>>>>> d777ca5b909f39f8c757f76e5a486e81b9d21873
     
     graph_handler.create_graph_json(lines)
     print("finished initial graph")

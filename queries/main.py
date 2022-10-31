@@ -151,17 +151,17 @@ async def generate_query(
 
     if server_pid_start_val or server_pid_end_val:
         if server_pid_start_val and not server_pid_end_val:
-            params["server_pid"] = server_pid_start_val
+            params["server_pid"] = f"[{server_pid_start_val},_]"
         elif not server_pid_start_val and server_pid_end_val:
-            params["server_pid"] = server_pid_end_val
+            params["server_pid"] = f"[_,{server_pid_end_val}]"
         elif server_pid_start_val and server_pid_end_val:
             params["server_pid"] = f"[{server_pid_start_val},{server_pid_end_val}]"
 
     if request_time_start_val or request_time_end_val:
         if request_time_start_val and not request_time_end_val:
-            params["request_time"] = request_time_start_val
+            params["request_time"] = f"[{request_time_start_val},_]"
         elif not request_time_start_val and request_time_end_val:
-            params["request_time"] = request_time_end_val
+            params["request_time"] = f"[_,{request_time_end_val}]"
         elif request_time_start_val and request_time_end_val:
             params["request_time"] = f"[{request_time_start_val},{request_time_end_val}]"
 
@@ -179,15 +179,12 @@ async def generate_query(
 
     if host:
         params["host"] = host
-    if type:
-        params["type"] = type
-
     
     if status_int_start_val or status_int_end_val:
         if status_int_start_val and not status_int_end_val:
-            params["status_int"] = status_int_start_val
+            params["status_int"] = f"[{status_int_start_val},_]"
         elif not status_int_start_val and status_int_end_val:
-            params["status_int"] = status_int_end_val
+            params["status_int"] = f"[_,{status_int_end_val}]"
         elif status_int_start_val and status_int_end_val:
             params["status_int"] = f"[{status_int_start_val},{status_int_end_val}]"
     
@@ -209,9 +206,9 @@ async def generate_query(
 
     if bytes_recvd_start_val or bytes_recvd_end_val:
         if bytes_recvd_start_val and not bytes_recvd_end_val:
-            params["bytes_recvd"] = bytes_recvd_start_val
+            params["bytes_recvd"] = f"[{bytes_recvd_start_val},_]"
         elif not bytes_recvd_start_val and bytes_recvd_end_val:
-            params["bytes_recvd"] = bytes_recvd_end_val
+            params["bytes_recvd"] = f"[_,{bytes_recvd_end_val}]"
         elif bytes_recvd_start_val and bytes_recvd_end_val:
             params["bytes_recvd"] = f"[{bytes_recvd_start_val},{bytes_recvd_end_val}]"
 
@@ -220,26 +217,26 @@ async def generate_query(
     
     if bytes_sent_start_val or bytes_sent_end_val:
         if bytes_sent_start_val and not bytes_sent_end_val:
-            params["bytes_sent"] = bytes_sent_start_val
+            params["bytes_sent"] = f"[{bytes_sent_start_val},_]"
         elif not bytes_sent_start_val and bytes_sent_end_val:
-            params["bytes_sent"] = bytes_sent_end_val
+            params["bytes_sent"] = f"[_,{bytes_sent_end_val}]"
         elif bytes_sent_start_val and bytes_sent_end_val:
             params["bytes_sent"] = f"[{bytes_sent_start_val},{bytes_sent_end_val}]"
 
     if request_end_time_start_val or request_end_time_end_val:
         if request_end_time_start_val and not request_end_time_end_val:
-            params["request_end_time"] = request_end_time_start_val
+            params["request_end_time"] = f"[{request_end_time_start_val},_]"
         elif not request_end_time_start_val and request_end_time_end_val:
-            params["request_end_time"] = request_end_time_end_val
+            params["request_end_time"] = f"[_{request_end_time_end_val}]"
         elif request_end_time_start_val or request_end_time_end_val:
             params["request_end_time"] = f"[{request_end_time_start_val},{request_end_time_end_val}]"
             
 
     if request_start_time_start_val or request_start_time_end_val:
         if request_start_time_start_val and not request_start_time_end_val:
-            params["request_start_time"] = request_start_time_start_val
+            params["request_start_time"] = f"[{request_start_time_start_val},_]"
         elif not request_start_time_start_val and request_start_time_end_val:
-            params["request_start_time"] = request_start_time_end_val
+            params["request_start_time"] = f"[_,{request_start_time_end_val}]"
         elif request_start_time_start_val and request_start_time_end_val:
             params["request_start_time"] = f"[{request_start_time_start_val},{request_start_time_end_val}]"
         

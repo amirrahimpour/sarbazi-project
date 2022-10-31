@@ -16,7 +16,7 @@ class ENV:
 
     # Neo4j connection credentials
     neo4j_credentials = {
-        "uri": "bolt://neo4j:7687",
+        "uri": "bolt://testneo4j:7687",
         "userName": "neo4j",
         "password": "test"
     }

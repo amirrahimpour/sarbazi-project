@@ -1,21 +1,21 @@
 version: '3.4'
 services:
-  neo4j:
-    container_name: testneo4j
-    ports:
-      - '7474:7474'
-      - '7687:7687'
-    volumes:
-      - '$HOME/neo4j/data:/data'
-      - '$HOME/neo4j/logs:/logs'
-      - '$HOME/neo4j/import:/var/lib/neo4j/import'
-      - '$HOME/neo4j/plugins:/plugins'
-    environment:
-      - NEO4J_AUTH=neo4j/test
-    image: 'neo4j:latest'
-    networks:
+  # neo4j:
+  #   container_name: testneo4j
+  #   ports:
+  #     - '7474:7474'
+  #     - '7687:7687'
+  #   volumes:
+  #     - '$HOME/neo4j/data:/data'
+  #     - '$HOME/neo4j/logs:/logs'
+  #     - '$HOME/neo4j/import:/var/lib/neo4j/import'
+  #     - '$HOME/neo4j/plugins:/plugins'
+  #   environment:
+  #     - NEO4J_AUTH=neo4j/test
+  #   image: 'neo4j:latest'
+  #   networks:
 
-      - online_net
+  #     - online_net
 
   online_log_processor:
     container_name: online_log_processor
@@ -25,8 +25,8 @@ services:
       dockerfile: Dockerfile
     networks:
       - online_net
-    depends_on:
-      - neo4j
+    # depends_on:
+    #   - neo4j
 
 networks:
   online_net:

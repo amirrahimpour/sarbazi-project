@@ -3,7 +3,7 @@ version: '3.3'
 services:
   query_generator:
     ports:
-      - '8000:8000'
+      - '8888:8000'
     
     build:
       context: .
