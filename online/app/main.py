@@ -55,11 +55,3 @@ if __name__ == '__main__':
         
         lte = new_lte
         gte = new_gte
-
-
-
-    
-
-    
-
-
