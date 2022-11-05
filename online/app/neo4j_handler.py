@@ -45,11 +45,11 @@ class Neo4jHandler:
         return create_node
 
     def create_new_edge(self, node_1: str, node_2: str, edge: Dict) -> str:
-        """create new edge from node_1 to node_2
+        """create new edge with properties from node_1 to node_2 
 
         :param node_1: source node
         :param node_2: destination node
-        :param edge: edge properties
+        :param edge: edge properties in key value format
         :return: edge creation query
         """
         string = ""
@@ -88,7 +88,7 @@ class Neo4jHandler:
             graphDB_Session.run(cqldelete2)
 
     def delete_edge(self, new_gte) -> None:
-        """ delete edges with datetime older than new_gte from the graph """
+        """ delete edges with datetime older than <new_gte> from the graph """
         
         cql_delete_edge = f"""
         MATCH p=()-[r]->()

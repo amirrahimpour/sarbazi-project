@@ -3,7 +3,9 @@ from utility import save_csv, save_json
 
 
 class ElasticConnection:
+    """ this class is responsible for elasticsearch connection and log retrieval """
     def __init__(self, ENV):
+        """ initialize connection client object """
         self.user = ENV["user"]
         self.password = ENV["password"]
         self.index = ENV["index"]
@@ -13,6 +15,7 @@ class ElasticConnection:
         )
 
     def read_main_log(self, gte, lte):
+        """ read the logs given the input parameters getting log starting from <gte> to <lte>"""
         print(f"getting log from {gte} to {lte}")
         body = {
             "query": {

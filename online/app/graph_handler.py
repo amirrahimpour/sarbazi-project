@@ -240,4 +240,5 @@ class GraphHandler:
         return node_1, node_2, edge
 
     def delete_old_edges(self, new_gte):
+        """ delete edges older than <new_gte> """
         self.neo.delete_edge(new_gte)

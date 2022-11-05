@@ -7,7 +7,7 @@ from config import ENV
 
 
 class LogManager:
-    """ defined to handle logging in the program"""
+    """ defined to handle internal logging in the program """
 
     def __init__(self):
         super(LogManager, self).__init__()
@@ -68,8 +68,9 @@ class LogManager:
         return self.handler
 
     def log_formatter(self) -> Formatter:
-        """make log formatter for given handler type
-        :return: log formatter
+        """ make log formatter for given handler type
+        
+            :return: log formatter
         """
         formatter = Formatter(
             """{"created_at": "%(asctime)s", "level_name": "%(levelname)s", "module_name": "%(module)s", "status": 

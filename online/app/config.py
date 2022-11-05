@@ -21,6 +21,7 @@ class ENV:
         "password": "test"
     }
 
+    # ElasticSearch connection credentials
     els_config = {
         "user": "elastic",
         "password": "changeme",

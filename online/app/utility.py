@@ -18,6 +18,7 @@ def save_csv(index_reader, attribute_names):
 
 
 def save_json(index_reader):
+    """ save the extracted ELK data into json format """
     with open('LogDB.json', 'w', encoding='utf-8') as jsonfile:
         flag = False
         jsonfile.write("[")
