@@ -220,7 +220,7 @@ class QueryGenerator:
                 + " return n1.name, n2.name, num"
             )
         
-        return query
+        return query.replace("{}", "")
 
 
 if __name__ == "__main__":
