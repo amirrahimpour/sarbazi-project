@@ -25,6 +25,9 @@ services:
       dockerfile: Dockerfile
     networks:
       - online_net
+    
+    volumes:
+      - ./app/config.py:/app/app/config.py
     # depends_on:
     #   - neo4j
 
