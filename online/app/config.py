@@ -31,14 +31,14 @@ class ENV:
 
     # server name mappings
     server_names = {
-        "172.18.0.2": "m1-r1z1s48",
-        "172.18.0.3": "m2-r1z1s48",
-        "172.18.0.4": "m3-r1z1s48",
-        "172.18.0.5": "m4-r1z1s48",
-        "172.18.0.6": "m5-r1z1s48",
-        "172.18.0.7": "m6-r1z1s48",
-        "172.18.0.8": "m7-r1z1s48",
-        "172.18.0.9": "m8-r1z1s48",
+        "172.19.0.10": "m1-r1z1s48",
+        "172.19.0.11": "m2-r1z1s48",
+        "172.19.0.5": "m3-r1z1s48",
+        "172.19.0.8": "m4-r1z1s48",
+        "172.19.0.6": "m5-r1z1s48",
+        "172.19.0.7": "m6-r1z1s48",
+        "172.19.0.9": "m7-r1z1s48",
+        "172.19.0.3": "m8-r1z1s48",
     }
 
     # list of method names
@@ -63,4 +63,4 @@ class ENV:
 
     # application moving window parameters
     time_window = timedelta(days=0, hours=0, minutes=5)
-    sliding = timedelta(days=0, hours=0, minutes=1)
+    sliding = timedelta(days=0, hours=0, minutes=1, seconds=0)
