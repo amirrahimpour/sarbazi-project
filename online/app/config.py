@@ -62,5 +62,6 @@ class ENV:
     }
 
     # application moving window parameters
+    start_time = datetime.now()
     time_window = timedelta(days=0, hours=0, minutes=5)
     sliding = timedelta(days=0, hours=0, minutes=1)

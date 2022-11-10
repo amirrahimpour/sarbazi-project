@@ -23,7 +23,7 @@ if __name__ == '__main__':
     
     # create elk connection client, initialize time interval values & read logs
     elastic_client = ElasticConnection(ENV.els_config)    
-    lte = datetime.now()
+    lte = ENV.start_time
     gte = lte - ENV.time_window     
     elastic_client.read_main_log(
         gte=gte.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     print("finished initial graph")
 
     # start the loop
-    while True:
+    while ENV.sliding.seconds != 0:
         # wait for the next time_window & read again
         sleep(ENV.sliding.seconds)
         new_lte = lte + ENV.sliding
