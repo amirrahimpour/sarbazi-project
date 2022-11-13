@@ -129,6 +129,7 @@ class GraphHandler:
         return source, method, destination
 
     def extract_source_from_user_agent(self, user_agent):
+        """ this function extracts the source service name from the user_agent field """
         source = None
         try:
             if "server" in user_agent:
@@ -145,6 +146,7 @@ class GraphHandler:
         return source
 
     def extract_destination_from_line(self, line):
+        """ this function extracts program_name from the log line """
         destination = None
         if "program_name" in line:
             program_name = line["program_name"]
@@ -167,6 +169,7 @@ class GraphHandler:
         return destination
 
     def extract_method_from_line(self, line):
+        """ this method extracts the method name from the log line"""
         if "method" in line:
             method = line["method"]
         else:
@@ -176,6 +179,7 @@ class GraphHandler:
         return method
 
     def extract_node_edge_from_json(self, line):
+        """ this function extracts node & edge from tokenized log obj """
         try:
             if line["remote_addr"] in ENV.server_names:
                 node_1 = ENV.server_names[line["remote_addr"]]
